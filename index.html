@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Particle WASM</title>
+</head>
+
+<body style="padding: 8px 80x 80x 8px;">
+    <canvas id="c"></canvas>
+
+    <script src="particle.js"></script>
+    <script>
+        Module.onRuntimeInitialized = () => {
+            const sim = new Module.ParticleSystem(2000, window.innerWidth, window.innerHeight);
+            const ctx = document.getElementById('c').getContext('2d');
+            c.width = window.innerWidth - 20;
+            c.height = window.innerHeight - 20;
+            console.log(`Inner Width: ${window.innerWidth}, Inner Height: ${window.innerHeight}`);
+
+            function frame() {
+                sim.step(60 / 1000);
+                const p = sim.positions();
+                ctx.clearRect(0, 0, c.width, c.height);
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, c.width, c.height);
+                ctx.fillStyle = 'red';
+
+                for (let i = 0; i < p.length; i += 2) {
+                    ctx.fillRect(p[i], p[i + 1], 2, 2);
+                }
+
+                requestAnimationFrame(frame);
+            }
+
+            frame();
+        };
+    </script>
+</body>
+
+</html>
